@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <string.h>
+
+// Function to implement the DFA
+int isAcceptedByDFA(char str[]) {
+    int state = 0; // Start at state 0
+
+    printf("Initial state: q%d\n", state);
+
+    // Process each character in the input string
+    for (int i = 0; str[i] != '\0'; i++) {
+        printf("Processing '%c'... ", str[i]);
+        switch (state) {
+            case 0: // Start state
+                if (str[i] == '0') {
+                    state = 1; // Transition to state 1
+                    printf("Transition to q1\n");
+                } else {
+                    state = 0; // Stay in q0
+                    printf("Stay in q0\n");
+                }
+                break;
+
+            case 1: // State after seeing '0'
+                if (str[i] == '1') {
+                    state = 2; // Transition to state 2
+                    printf("Transition to q2\n");
+                } else {
+                    state = 1; // Stay in q1
+                    printf("Stay in q1\n");
+                }
+                break;
+
+            case 2: // State after seeing "01"
+                if (str[i] == '0') {
+                    state = 1; // Transition back to q1
+                    printf("Transition to q1\n");
+                } else {
+                    state = 0; // Transition to q0
+                    printf("Transition to q0\n");
+                }
+                break;
+
+            default: // Invalid state
+                printf("Reached invalid state\n");
+                return 0; // Reject the string
+        }
+    }
+
+    // Check if the final state is the accepting state (state 2)
+    if (state == 2) {
+        printf("Final state: q2 (ACCEPTED)\n");
+        return 1; // String is accepted
+    } else {
+        printf("Final state: q%d (REJECTED)\n", state);
+        return 0; // String is rejected
+    }
+}
+
+int main() {
+    char str[100];
+
+    // Input the string from the user
+    printf("Enter a binary string (only 0 and 1): ");
+    scanf("%s", str);
+
+    // Check if the string is accepted
+    if (isAcceptedByDFA(str))
+        printf("The string is ACCEPTED by the DFA.\n");
+    else
+        printf("The string is REJECTED by the DFA.\n");
+
+    return 0;
+} 
